@@ -1,7 +1,38 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <body>
-Hello <b>$name!</b>  Welcome to Velocity!
-<h1> Hello User</h1>
+<div id="page-wrap">
+    <!-- First page -->
+    <div style="width:100%; min-height:28.7cm;">
+        <table class="div-100 benefitTableClass">
+            <tr class="div-100">
+                <!-- Local brand logo -->
+                <td style="text-align:left;width:225px;vertical-align:middle;">
+                    #set( $maxHeight = 60 )
+                    #set( $maxWidth  = 756 )
+                    <img #generateMediaImgAttributes($ctx.brand.logo $maxHeight $maxWidth)/>
+                </td>
+                <td style="text-align:right;width:515px;margin-left:10px;">
+                    <!-- sebGlobalStatus -->
+                    #set($definitivetexts = "DEFINITIVETEXTS")
+                    #set($temporary = "TEMPORARY")
+                    #if ($ctx.sebGlobalStatus.equalsIgnoreCase($definitivetexts))
+                        <img src="#retrieveMedia('icon_status_definitivetexts.png')"/>
+                    #end
+                    #if ($ctx.sebGlobalStatus.equalsIgnoreCase($temporary))
+                        <img src="#retrieveMedia('icon_status_temporary.png')"/>
+                    #end
+                </td>
+            </tr>
+        </table>
+
+        <!-- Main lifestyle photo -->
+        <div class="lifestyle-picture">
+            #set( $maxHeight = 435 )
+            #set( $maxWidth  = 756 )
+            <img #generateMediaImgAttributes($ctx.lifeStyleHeaderPicture $maxHeight $maxWidth)/>
+        </div>
+
+</div>
 </body>
 </html>

@@ -9,7 +9,7 @@ import java.io.StringWriter;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.springframework.boot.SpringApplication;
@@ -39,17 +39,18 @@ public class HtmlToPdfApplication {
             @PathVariable("fileName") String fileName) throws IOException {
 
 		/* first, get and initialize an engine */
-		VelocityEngine ve = new VelocityEngine();
+		Velocity ve = new Velocity();
 
 		/* next, get the Template */
-		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-		ve.setProperty("classpath.resource.loader.class",
+		Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+		Velocity.setProperty("classpath.resource.loader.class",
 				ClasspathResourceLoader.class.getName());
-		ve.init();
-		Template t = ve.getTemplate("templates/helloworld.vm");
+		Velocity.init();
+		Template t = Velocity.getTemplate("templates/index.vm");
 		/* create a context and add data */
 		VelocityContext context = new VelocityContext();
 		context.put("name", "World");
+		context.put("fileName",fileName);
 		/* now render the template into a StringWriter */
 		StringWriter writer = new StringWriter();
 		t.merge(context, writer);
@@ -63,7 +64,7 @@ public class HtmlToPdfApplication {
 		HttpHeaders header = new HttpHeaders();
 	    header.setContentType(MediaType.APPLICATION_PDF);
 	    header.set(HttpHeaders.CONTENT_DISPOSITION,
-	                   "attachment; filename=" + fileName.replace(" ", "_"));
+	                   "attachment; filename=" + fileName.replace(" ", "_")+".pdf");
 	    header.setContentLength(baos.toByteArray().length);
 
 	    return new HttpEntity<byte[]>(baos.toByteArray(), header);
@@ -85,8 +86,8 @@ public class HtmlToPdfApplication {
 			document.addCreationDate();
 			document.addProducer();
 			document.addCreator("kinns123.github.io");
-			document.addTitle("HTML to PDF using itext");
-			document.setPageSize(PageSize.LETTER);
+			document.addTitle("HTML to PDF using itex t");
+			document.setPageSize(PageSize.A4);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			PdfWriter.getInstance(document, baos);
@@ -104,7 +105,7 @@ public class HtmlToPdfApplication {
 
 			return baos;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 			return null;
 		}
 
